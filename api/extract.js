@@ -49,9 +49,10 @@ module.exports = async (req, res) => {
     }
 
   } catch (error) {
+    let errMsg = error.message || error.error || JSON.stringify(error);
     return res.status(500).json({ 
       status: 'error', 
-      message: 'Server Error: ' + error.message 
+      message: 'Server Error: ' + errMsg 
     });
   }
 };
