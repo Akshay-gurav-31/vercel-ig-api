@@ -1,0 +1,13 @@
+{
+  "name": "vercel-ig-api",
+  "version": "1.0.0",
+  "description": "Instagram Downloader API for Vercel",
+  "main": "api/extract.js",
+  "scripts": {
+    "start": "node api/extract.js"
+  },
+  "dependencies": {
+    "instagram-url-direct": "^1.0.12",
+    "axios": "^1.6.7"
+  }
+}
