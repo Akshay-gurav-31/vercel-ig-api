@@ -1,9 +1,9 @@
-const instagramGetUrl = require("instagram-url-direct");
+const instagramGetUrl = require("instagram-url-direct").default;
 
-// Yeh Vercel ka Serverless Function hai. 
-// Jab bhi koi /extract par POST request bhejega, yeh function chalega.
+// This is a Vercel Serverless Function.
+// It will be executed whenever a POST request is sent to /extract.
 module.exports = async (req, res) => {
-  // CORS Headers (taaki Android app se request aane par block na ho)
+  // CORS Headers (to prevent requests from the Android app from being blocked)
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -18,20 +18,20 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // Sirf POST request allow karenge
+  // Only allow POST requests
   if (req.method !== 'POST') {
-    return res.status(405).json({ status: 'error', message: 'Sirf POST requests allowed hain' });
+    return res.status(405).json({ status: 'error', message: 'Only POST requests are allowed' });
   }
 
   try {
     const { url } = req.body;
 
     if (!url) {
-      return res.status(400).json({ status: 'error', message: 'URL dena zaroori hai' });
+      return res.status(400).json({ status: 'error', message: 'URL is required' });
     }
 
-    // Yahan hum NPM package (instagram-url-direct) ka use kar rahe hain.
-    // Agar tumhara Render par apna koi custom code tha, toh tum use yahan paste kar sakte ho.
+    // We are using the NPM package (instagram-url-direct) here.
+    // If you had your own custom code on Render, you can paste it here instead.
     let links = await instagramGetUrl(url);
 
     if (links && links.url_list && links.url_list.length > 0) {
@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
     } else {
       return res.status(400).json({ 
         status: 'error', 
-        message: 'Video link nahi nikal paya. Ya toh private account hai, ya Instagram ne block kiya.' 
+        message: 'Could not extract video link. The account might be private or Instagram blocked the request.' 
       });
     }
 
